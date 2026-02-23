@@ -11,10 +11,10 @@ export function StripeCheckoutButton({ plan }: { plan: "starter" | "pro" | "busi
     setLoading(true);
     try {
       const res = await fetch("/api/checkout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plan }),
-    });
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan }),
+      });
 
       const data = (await res.json()) as { url?: string; error?: string };
 
@@ -24,7 +24,7 @@ export function StripeCheckoutButton({ plan }: { plan: "starter" | "pro" | "busi
       }
 
       alert(data.error ?? "Checkout konnte nicht gestartet werden.");
-    } catch (e) {
+    } catch {
       alert("Netzwerkfehler beim Starten des Checkouts.");
     } finally {
       setLoading(false);
@@ -37,30 +37,19 @@ export function StripeCheckoutButton({ plan }: { plan: "starter" | "pro" | "busi
         type="button"
         onClick={startCheckout}
         disabled={loading}
-        className="
-          inline-flex items-center justify-center gap-2
-          rounded-lg border px-4 py-2 text-sm
-          cursor-pointer select-none
-          transition
-          hover:bg-white/5
-          active:scale-[0.98]
-          focus:outline-none focus:ring-2 focus:ring-white/20
-          disabled:cursor-not-allowed disabled:opacity-60
-        "
+        className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-white text-sm font-medium text-zinc-900 transition hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-300 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? (
           <>
-            <span className="h-4 w-4 animate-spin rounded-full border border-white/30 border-t-white/80" />
+            <span className="h-4 w-4 animate-spin rounded-full border border-zinc-400 border-t-zinc-900" />
             Öffne Checkout…
           </>
         ) : (
-          "Stripe Checkout (Testmode) starten"
+          "Stripe Checkout starten"
         )}
       </button>
 
-      <p className="mt-2 text-xs text-muted-foreground">
-        Testzahlung – kein echtes Geld. Stripe läuft im Testmode.
-      </p>
+      <p className="mt-2 text-xs text-zinc-400">Testzahlung im Stripe-Testmode. Es wird kein echtes Geld belastet.</p>
     </div>
   );
 }

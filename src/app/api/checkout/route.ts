@@ -24,7 +24,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing plan" }, { status: 400 });
   }
 
-  const stripe = new Stripe(secretKey, { apiVersion: "2025-01-27.acacia" as any });
+  const apiVersion: Stripe.LatestApiVersion = "2026-01-28.clover";
+  const stripe = new Stripe(secretKey, { apiVersion });
 
   const origin =
     process.env.NEXT_PUBLIC_APP_URL ||

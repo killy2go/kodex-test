@@ -1,32 +1,61 @@
+import { Card } from "@/components/shared/Card";
 import { Section } from "@/components/shared/Section";
 import { StripeCheckoutButton } from "@/components/stripe/StripeCheckoutButton";
+
+const tiers = [
+  {
+    name: "Starter",
+    price: "€29",
+    description: "Für Solo-Founder und MVPs",
+    plan: "starter",
+    popular: false,
+    features: ["1 Projekt", "Stripe Basis-Setup", "Core Landing Sections", "Community Support"],
+  },
+  {
+    name: "Pro",
+    price: "€79",
+    description: "Für wachsende SaaS-Produkte",
+    plan: "pro",
+    popular: true,
+    features: ["Bis zu 5 Projekte", "Stripe + Newsletter + Chatbot", "A/B-ready Conversion Components", "Priority Support"],
+  },
+  {
+    name: "Business",
+    price: "€149",
+    description: "Für Teams mit mehreren Produkten",
+    plan: "business",
+    popular: false,
+    features: ["Unbegrenzte Projekte", "Custom Module Blueprints", "Design Review Templates", "Dedicated Support"],
+  },
+] as const;
 
 export function Pricing() {
   return (
     <Section
       id="pricing"
-      title="Pricing"
-      subtitle="Pläne als Cards. Buttons kannst du später mit Stripe verbinden."
+      title="Pricing, das mit deinem Produkt mitwächst"
+      subtitle="Transparent, modular und auf schnelle Iterationen ausgelegt. Jeder Plan enthält den vollen Core-Stack."
     >
       <div className="grid gap-4 lg:grid-cols-3">
-        {[
-          { name: "Starter", price: "€29", desc: "Für kleine Projekte", plan: "starter" },
-          { name: "Pro", price: "€79", desc: "Für Growth", plan: "pro" },
-          { name: "Business", price: "€149", desc: "Für Teams", plan: "business" },
-        ].map((p) => (
-          <div key={p.name} className="rounded-xl border p-6">
-            <h3 className="text-lg font-semibold">{p.name}</h3>
-            <p className="mt-2 text-3xl font-semibold">{p.price}</p>
-            <p className="mt-2 text-sm text-muted-foreground">{p.desc}</p>
-
-            <div className="mt-6">
-              <StripeCheckoutButton plan={p.plan as "starter" | "pro" | "business"} />
-            </div>
-          </div>
+        {tiers.map((tier) => (
+          <Card key={tier.name} className={tier.popular ? "border-blue-400/50 bg-blue-500/10" : ""}>
+            {tier.popular && (
+              <span className="rounded-full border border-blue-300/40 bg-blue-400/20 px-2.5 py-1 text-xs font-medium text-blue-100">
+                Most popular
+              </span>
+            )}
+            <h3 className="mt-4 text-lg font-semibold text-white">{tier.name}</h3>
+            <p className="mt-2 text-4xl font-semibold tracking-tight text-white">{tier.price}</p>
+            <p className="mt-2 text-sm text-zinc-300">{tier.description}</p>
+            <ul className="mt-6 space-y-2 text-sm text-zinc-200">
+              {tier.features.map((feature) => (
+                <li key={feature}>• {feature}</li>
+              ))}
+            </ul>
+            <StripeCheckoutButton plan={tier.plan} />
+          </Card>
         ))}
       </div>
-
-    {/* WL_PRICING_CTA */}
     </Section>
   );
 }
